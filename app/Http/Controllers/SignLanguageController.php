@@ -15,15 +15,14 @@ class SignLanguageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'word' => 'required',
-            'image' => 'required|image'
+            'word' => 'required'
         ]);
 
-        $imagePath = $request->file('image')->store('signs', 'public');
+        $imageName = strtolower($request->word) . ".jpg";
 
         $sign = SignLanguage::create([
             'word' => $request->word,
-            'image' => $imagePath
+            'image' => $imageName
         ]);
 
         return response()->json($sign);
@@ -38,8 +37,11 @@ class SignLanguageController extends Controller
     {
         $sign = SignLanguage::findOrFail($id);
 
+        $imageName = strtolower($request->word) . ".jpg";
+
         $sign->update([
-            'word' => $request->word
+            'word' => $request->word,
+            'image' => $imageName
         ]);
 
         return response()->json($sign);
