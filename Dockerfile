@@ -22,9 +22,6 @@ COPY . .
 # Install Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Generate app key
-RUN php artisan key:generate
-
 # Install frontend dependencies and build assets
 RUN npm install
 RUN npm run build
@@ -32,5 +29,5 @@ RUN npm run build
 # Expose port
 EXPOSE 10000
 
-# Startup: wait a few seconds, run migrations, then serve
-CMD sleep 5 && php artisan migrate --force && php -S 0.0.0.0:10000 -t public
+# Startup commands
+CMD php artisan key:generate || true && php artisan migrate --force && php -S 0.0.0.0:10000 -t public
